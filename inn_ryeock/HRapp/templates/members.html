@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>인적사항 기록부</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+  <style>
+    td {
+      vertical-align: middle !important;
+    }
+    .pagination > li > a.active {
+      background-color: #337ab7;
+      color: white;
+    }
+    .search-container {
+      text-align: right;
+      margin-bottom: 15px;
+    }
+  </style>
+
+</head>
+<body>
+
+<div class="container">
+  <h2><strong>인적사항 기록부</strong></h2><br>     
+
+  <div class="row" style="margin-bottom: 10px;">
+    <div class="col-sm-6">
+      <button class="btn btn-primary" onclick="location.href='{% url 'me_detail' %}'" id="membersMe">내 정보 조회</button>
+      <button class="btn btn-danger" onclick="location.href='{% url 'login' %}'" id="logout">로그아웃</button>
+    </div>
+    <div class="col-sm-6 search-container">
+      <form action="{% url 'members' %}" method="get" class="form-inline">
+        <input type="text" placeholder="Search.." name="search" class="form-control"
+         style="width: auto; display: inline-block;" value="{{ request.GET.search }}">
+        <button type="submit" class="btn btn-default">
+        <i class="fa fa-search"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th style="text-align: center;">이 름</th>
+        <th style="text-align: center;">생년월일</th>
+        <th style="text-align: center;">E-mail</th>
+        <th style="text-align: center;">상세정보</th>        
+      </tr>
+    </thead>
+    <tbody id="infoTable"></tbody>
+  </table>
+
+  <!-- 페이지네이션 -->
+  <nav style="text-align: center;">
+    <ul class="pagination" id="pagination" style="display: inline-block;"></ul>
+  </nav>
+</div>
+
+<script>
+  const users = [
+    {% for user in users %}
+    {
+      name: "{{ user.name }}",
+      birth: "{{ user.age }}세",
+      email: "{{ user.email }}",
+      detailUrl: "{% url 'member_detail' user.id %}"
+    },
+    {% endfor %}
+  ];
+
+  const rowsPerPage = 10;
+  const pagesPerGroup = 5;
+  let currentPage = 1;
+
+  const totalPages = Math.ceil(users.length / rowsPerPage);
+
+  function renderTable(page) {
+    const table = document.getElementById("infoTable");
+    table.innerHTML = "";
+
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedUsers = users.slice(start, end);
+
+    paginatedUsers.forEach(user => {
+      const row = `
+        <tr>
+          <td style="text-align: center;">${user.name}</td>
+          <td style="text-align: center;">${user.birth}</td>
+          <td style="text-align: center;">${user.email}</td>
+          <td style="text-align: center;">
+            <a href="${user.detailUrl}" class="btn btn-info">상세정보보기</a>
+          </td>
+        </tr>`;
+      table.innerHTML += row;
+    });
+
+    renderPagination(page);
+  }
+
+  function renderPagination(page) {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
+    const group = Math.floor((page - 1) / pagesPerGroup);
+    const startPage = group * pagesPerGroup + 1;
+    const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+
+    // << 이전 그룹
+    const prevGroup = document.createElement("li");
+    const prevLink = document.createElement("a");
+    prevLink.href = "#";
+    prevLink.innerHTML = "&laquo;";
+    prevLink.onclick = (e) => {
+      e.preventDefault();
+      if (startPage > 1) {
+        currentPage = startPage - 1;
+        renderTable(currentPage);
+      }
+    };
+    prevGroup.appendChild(prevLink);
+    pagination.appendChild(prevGroup);
+
+    // 숫자 페이지
+    for (let i = startPage; i <= endPage; i++) {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = "#";
+      a.textContent = i;
+      if (i === page) a.classList.add("active");
+      a.onclick = (e) => {
+        e.preventDefault();
+        currentPage = i;
+        renderTable(currentPage);
+      };
+      li.appendChild(a);
+      pagination.appendChild(li);
+    }
+
+    // >> 다음 그룹
+    const nextGroup = document.createElement("li");
+    const nextLink = document.createElement("a");
+    nextLink.href = "#";
+    nextLink.innerHTML = "&raquo;";
+    nextLink.onclick = (e) => {
+      e.preventDefault();
+      if (endPage < totalPages) {
+        currentPage = endPage + 1;
+        renderTable(currentPage);
+      }
+    };
+    nextGroup.appendChild(nextLink);
+    pagination.appendChild(nextGroup);
+  }
+
+  renderTable(currentPage);
+</script>
+</body>
+</html>

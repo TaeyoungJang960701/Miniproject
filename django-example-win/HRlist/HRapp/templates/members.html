@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  
+
   <style>
     td {
       vertical-align: middle !important;
@@ -22,12 +22,11 @@
       margin-bottom: 15px;
     }
   </style>
-
 </head>
 <body>
 
 <div class="container">
-  <h2><strong>인적사항 기록부</strong></h2><br>     
+  <h2><strong>인적사항 기록부</strong></h2><br>
 
   <div class="row" style="margin-bottom: 10px;">
     <div class="col-sm-6">
@@ -51,13 +50,12 @@
         <th style="text-align: center;">이 름</th>
         <th style="text-align: center;">생년월일</th>
         <th style="text-align: center;">E-mail</th>
-        <th style="text-align: center;">상세정보</th>        
+        <th style="text-align: center;">상세정보</th>
       </tr>
     </thead>
     <tbody id="infoTable"></tbody>
   </table>
 
-  <!-- 페이지네이션 -->
   <nav style="text-align: center;">
     <ul class="pagination" id="pagination" style="display: inline-block;"></ul>
   </nav>
@@ -70,63 +68,3 @@
       name: "{{ user.name }}",
       birth: "{{ user.age }}세",
       email: "{{ user.email }}",
-      detailUrl: "{% url 'member_detail' user.id %}"
-    },
-    {% endfor %}
-  ];
-
-  const rowsPerPage = 6;
-  let currentPage = 1;
-
-  function renderTable(page) {
-    const table = document.getElementById("infoTable");
-    table.innerHTML = "";
-
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-    const paginatedUsers = users.slice(start, end);
-
-    paginatedUsers.forEach(user => {
-      const row = `
-        <tr>
-          <td style="text-align: center;">${user.name}</td>
-          <td style="text-align: center;">${user.birth}</td>
-          <td style="text-align: center;">${user.email}</td>
-          <td style="text-align: center;">
-            <a href="${user.detailUrl}" class="btn btn-info">상세정보보기</a>
-          </td>
-        </tr>
-      `;
-      table.innerHTML += row;
-    });
-
-    renderPagination(page);
-  }
-
-  function renderPagination(page) {
-    const pagination = document.getElementById("pagination");
-    pagination.innerHTML = "";
-
-    const totalPages = Math.ceil(users.length / rowsPerPage);
-
-    for (let i = 1; i <= totalPages; i++) {
-      const li = document.createElement("li");
-      const a = document.createElement("a");
-      a.href = "#";
-      a.textContent = i;
-      if (i === page) a.classList.add("active");
-      a.addEventListener("click", (e) => {
-        e.preventDefault();
-        currentPage = i;
-        renderTable(currentPage);
-      });
-      li.appendChild(a);
-      pagination.appendChild(li);
-    }
-  }
-
-  // 최초 렌더링
-  renderTable(currentPage);
-</script>
-</body>
-</html>
