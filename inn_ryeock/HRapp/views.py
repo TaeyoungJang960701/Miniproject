@@ -82,18 +82,14 @@ def SignupView(request):
 
 def MembersView(request):
     query = request.GET.get('search', '')
-
     if query:
         users = User.objects.filter(user_name__icontains=query)
     else:
         users = User.objects.all()
-
     if not users:
         return render(request, 'members.html', {'error': '등록된 회원이 없습니다.'}) 
-
     today = date.today()
     user_data = []
-
     for user in users:
         birthdate = user.user_birthdate
         age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
