@@ -536,6 +536,6 @@ urlpatterns = [
 </script>
 </body>
 </html>
-
-</details>
 ```
+</details>
+
