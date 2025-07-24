@@ -30,7 +30,7 @@
 - [ ] README 작성하기  
 - [ ] 깃허브에 업로드하기
 
-● 박선번: 
+● 박번: 
 DB구성, login.html제작, Members.html제작, Medetail.html제작, home.html제작, membersdetail.html제작, signup.html제작
 , PPT제작, django 구성, ajax구성, 스토리보드제작
 ● 정태영: 
@@ -42,5 +42,7 @@ B구성, login.html제작, Members.html제작, Medetail.html제작, home.html제
 
 ## 💻 코드 예시
 
+
+[back to top](#top) <!-- 어디서든 클릭 시 최상단으로 이동 -->
 ```javascript
 console.log("안녕하세요, 마크다운!");
