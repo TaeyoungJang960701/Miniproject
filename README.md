@@ -226,8 +226,6 @@ def MeImageView(request):
         user.save(update_fields=['profile_image', 'updated_at'])
         return JsonResponse({'image_url': user.profile_image.url})
     return JsonResponse({'error': 'No image uploaded'}, status=400)
-
-</details>
 ```
 [Back To Top](#-💻-Code)
 
