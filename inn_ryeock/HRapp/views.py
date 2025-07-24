@@ -144,6 +144,6 @@ def MeImageView(request):
 
     if 'profile_image' in request.FILES:
         user.profile_image = request.FILES['profile_image']
-        user.save(update_fields=['profile_image', 'updated_at'])  # ✅ updated_at 갱신 강제 포함
+        user.save(update_fields=['profile_image', 'updated_at'])
         return JsonResponse({'image_url': user.profile_image.url})
     return JsonResponse({'error': 'No image uploaded'}, status=400)
