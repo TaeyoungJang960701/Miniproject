@@ -256,6 +256,7 @@ class User(models.Model):
         return self.user_name
   ```
 </details>
+<details>
 <summary>🔽 urls.py 코드 보기</summary>
   
 ```python
