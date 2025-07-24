@@ -277,7 +277,7 @@ urlpatterns = [
 ```
 </details>
 
-## 💻 BACK 코드 예시
+## 💻 FRONT 코드 예시
 
 <details>
   <summary>🔽 home.html 코드 보기</summary>
@@ -305,5 +305,237 @@ urlpatterns = [
     </div>
 </body>
 </html>
+</details>
+```
+
+<details>
+  <summary>🔽 login.html 코드 보기</summary>
+  
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <title>로그인</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+ <body class="d-flex align-items-center justify-content-center vh-100">
+
+  <div class="container" style="max-width: 400px;">
+    <h2 class="text-center mb-3">로그인</h2>
+
+    <form method="POST">
+      {% csrf_token %}
+      <h6 class="text-center mb-3">
+        {% if error %}
+          <span class="text-danger">{{ error }}</span>
+        {% else %}
+          로그인하세요
+        {% endif %}        
+        </h6>      
+      <div class="mb-3">
+        <label for="user_email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="user_email" name="user_email" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="user_password" class="form-label">비밀번호</label>
+        <input type="password" class="form-control" id="user_password" name="user_password" required>
+      </div>  
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">로그인</button>
+      </div>
+      <div>
+        <h6 class="text-center mb-3">
+          <a href="{% url 'signup' %}">회원가입</a>        
+        </h6>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>
+</details>
+```
+
+<details>
+  <summary>🔽 medetail.html 코드 보기</summary>
+  
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 정보 조회</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <style>
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+    }
+    </style>
+</head>
+<body>
+  <section style="background-color: #eee;">
+  <div class="container py-4">
+
+    <!-- 뒤로가기 -->
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <nav class="bg-light rounded-3 p-3 mb-4">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'members' %}">뒤로가기</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ user.user_name }}</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- 프로필 카드 -->
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card mb-4 text-center">
+          <div class="card-body">
+            <!-- 프로필 이미지 -->
+            {% if user.profile_image %}
+              <img src="{{ user.profile_image.url }}?{{ user.updated_at.timestamp }}"
+                  alt="avatar" class="rounded-circle profile-image mb-3" id="profileImage">
+            {% else %}
+              <img src="{{ MEDIA_URL }}profile_images/default.png"
+                  alt="avatar" class="rounded-circle profile-image mb-3" id="profileImage">
+            {% endif %}
+
+
+
+            <!-- 이미지 업로드 폼 -->
+            <form id="imageUploadForm" enctype="multipart/form-data" style="display: none;">
+              <input type="file" name="profile_image" id="profileImageInput" class="form-control mb-2" accept="image/*">
+              <button type="submit" class="btn btn-success btn-sm">이미지 변경</button>
+            </form>
+
+            <!-- 편집 버튼 -->
+            <div class="d-flex justify-content-center mt-2">
+              <button type="button" class="btn btn-outline-primary" onclick="editRow(this)">편집</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 사용자 정보 -->
+        <div class="card">
+          <div class="card-body">
+            <div class="row mb-3">
+              <div class="col-sm-3"><strong>Name</strong></div>
+              <div class="col-sm-9" id="fullName">{{ user.user_name }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3"><strong>Email</strong></div>
+              <div class="col-sm-9" id="Email">{{ user.user_email }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3"><strong>Phone</strong></div>
+              <div class="col-sm-9" id="Phone">{{ user.user_phone }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-3"><strong>Address</strong></div>
+              <div class="col-sm-9" id="Address">{{ user.user_address }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CSRF -->
+        <input type="hidden" id="csrf_token" value="{{ csrf_token }}">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- AJAX 스크립트 -->
+<script>
+  let isEditing = false;
+
+  function editRow(btn) {
+    const nameEl = document.getElementById('fullName');
+    const emailEl = document.getElementById('Email');
+    const phoneEl = document.getElementById('Phone');
+    const addressEl = document.getElementById('Address');
+    const uploadForm = document.getElementById('imageUploadForm');
+
+    if (!isEditing) {
+      nameEl.innerHTML = `<input type="text" id="nameInput" class="form-control" value="${nameEl.textContent.trim()}">`;
+      emailEl.innerHTML = `<input type="email" id="emailInput" class="form-control" value="${emailEl.textContent.trim()}">`;
+      phoneEl.innerHTML = `<input type="text" id="phoneInput" class="form-control" value="${phoneEl.textContent.trim()}">`;
+      addressEl.innerHTML = `<input type="text" id="addressInput" class="form-control" value="${addressEl.textContent.trim()}">`;
+
+      btn.textContent = '저장';
+      uploadForm.style.display = 'block';  // 이미지 폼 표시
+      isEditing = true;
+    } else {
+      const data = {
+        user_name: document.getElementById('nameInput').value,
+        user_email: document.getElementById('emailInput').value,
+        user_phone: document.getElementById('phoneInput').value,
+        user_address: document.getElementById('addressInput').value,
+        csrfmiddlewaretoken: document.getElementById('csrf_token').value
+      };
+
+      $.ajax({
+        url: "{% url 'me_edit' %}",
+        method: "POST",
+        data: data,
+        success: function (response) {
+          nameEl.textContent = response.user_name;
+          emailEl.textContent = response.user_email;
+          phoneEl.textContent = response.user_phone;
+          addressEl.textContent = response.user_address;
+          btn.textContent = '편집';
+          uploadForm.style.display = 'none'; // 폼 숨김
+          isEditing = false;
+          alert("수정 완료");
+        },
+        error: function (xhr) {
+          alert("오류: " + xhr.responseText);
+        }
+      });
+    }
+  }
+
+  // 이미지 업로드 AJAX
+  $(document).ready(function () {
+    $('#imageUploadForm').on('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      formData.append('csrfmiddlewaretoken', $('#csrf_token').val());
+
+      $.ajax({
+        url: "{% url 'me_edit_image' %}",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+          $('#profileImage').attr('src', data.image_url);
+          alert("이미지 변경 완료");
+        },
+        error: function (xhr) {
+          alert("업로드 실패: " + xhr.responseText);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
+
 </details>
 ```
