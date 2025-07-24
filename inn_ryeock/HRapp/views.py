@@ -54,6 +54,9 @@ def SignupView(request):
         if not(user_name and user_password and password_check and user_address and user_phone and user_birthdate and user_email):
             res_data['error'] = "모든 값을 입력해주세요."
             return render(request, 'signup.html', res_data)
+        elif User.objects.filter(user_email=user_email).exists():
+            res_data['error'] = "이미 존재하는 이메일 입니다."
+            return render(request, 'signup.html', res_data)
         elif user_password != password_check:
             res_data['error'] = "비밀번호가 일치하지 않습니다."
             return render(request, 'signup.html', res_data)
