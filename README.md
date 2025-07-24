@@ -227,10 +227,11 @@ def MeImageView(request):
 
 <details>
 <summary>🔽 models.py 코드 보기</summary>
+  
 ```python
-from django.db import models
 
-# Create your models here.
+ from django.db import models
+
 class User(models.Model):
     
     user_email = models.EmailField(unique=True) # 이메일을 받는데 이게 ID임
