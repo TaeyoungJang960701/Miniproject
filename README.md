@@ -541,3 +541,336 @@ urlpatterns = [
 ```
 </details>
 
+<details>
+  <summary>🔽 members.html 코드 보기</summary>
+  
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>인적사항 기록부</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+  <style>
+    td {
+      vertical-align: middle !important;
+    }
+    .pagination > li > a.active {
+      background-color: #337ab7;
+      color: white;
+    }
+    .search-container {
+      text-align: right;
+      margin-bottom: 15px;
+    }
+  </style>
+
+</head>
+<body>
+
+<div class="container">
+  <h2><strong>인적사항 기록부</strong></h2><br>     
+
+  <div class="row" style="margin-bottom: 10px;">
+    <div class="col-sm-6">
+      <button class="btn btn-primary" onclick="location.href='{% url 'me_detail' %}'" id="membersMe">내 정보 조회</button>
+      <button class="btn btn-danger" onclick="location.href='{% url 'login' %}'" id="logout">로그아웃</button>
+    </div>
+    <div class="col-sm-6 search-container">
+      <form action="{% url 'members' %}" method="get" class="form-inline">
+        <input type="text" placeholder="Search.." name="search" class="form-control"
+         style="width: auto; display: inline-block;" value="{{ request.GET.search }}">
+        <button type="submit" class="btn btn-default">
+        <i class="fa fa-search"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th style="text-align: center;">이 름</th>
+        <th style="text-align: center;">생년월일</th>
+        <th style="text-align: center;">E-mail</th>
+        <th style="text-align: center;">상세정보</th>        
+      </tr>
+    </thead>
+    <tbody id="infoTable"></tbody>
+  </table>
+
+  <!-- 페이지네이션 -->
+  <nav style="text-align: center;">
+    <ul class="pagination" id="pagination" style="display: inline-block;"></ul>
+  </nav>
+</div>
+
+<script>
+  const users = [
+    {% for user in users %}
+    {
+      name: "{{ user.name }}",
+      birth: "{{ user.age }}세",
+      email: "{{ user.email }}",
+      detailUrl: "{% url 'member_detail' user.id %}"
+    },
+    {% endfor %}
+  ];
+
+  const rowsPerPage = 10;
+  const pagesPerGroup = 5;
+  let currentPage = 1;
+
+  const totalPages = Math.ceil(users.length / rowsPerPage);
+
+  function renderTable(page) {
+    const table = document.getElementById("infoTable");
+    table.innerHTML = "";
+
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedUsers = users.slice(start, end);
+
+    paginatedUsers.forEach(user => {
+      const row = `
+        <tr>
+          <td style="text-align: center;">${user.name}</td>
+          <td style="text-align: center;">${user.birth}</td>
+          <td style="text-align: center;">${user.email}</td>
+          <td style="text-align: center;">
+            <a href="${user.detailUrl}" class="btn btn-info">상세정보보기</a>
+          </td>
+        </tr>`;
+      table.innerHTML += row;
+    });
+
+    renderPagination(page);
+  }
+
+  function renderPagination(page) {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
+    const group = Math.floor((page - 1) / pagesPerGroup);
+    const startPage = group * pagesPerGroup + 1;
+    const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
+
+    // << 이전 그룹
+    const prevGroup = document.createElement("li");
+    const prevLink = document.createElement("a");
+    prevLink.href = "#";
+    prevLink.innerHTML = "&laquo;";
+    prevLink.onclick = (e) => {
+      e.preventDefault();
+      if (startPage > 1) {
+        currentPage = startPage - 1;
+        renderTable(currentPage);
+      }
+    };
+    prevGroup.appendChild(prevLink);
+    pagination.appendChild(prevGroup);
+
+    // 숫자 페이지
+    for (let i = startPage; i <= endPage; i++) {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = "#";
+      a.textContent = i;
+      if (i === page) a.classList.add("active");
+      a.onclick = (e) => {
+        e.preventDefault();
+        currentPage = i;
+        renderTable(currentPage);
+      };
+      li.appendChild(a);
+      pagination.appendChild(li);
+    }
+
+    // >> 다음 그룹
+    const nextGroup = document.createElement("li");
+    const nextLink = document.createElement("a");
+    nextLink.href = "#";
+    nextLink.innerHTML = "&raquo;";
+    nextLink.onclick = (e) => {
+      e.preventDefault();
+      if (endPage < totalPages) {
+        currentPage = endPage + 1;
+        renderTable(currentPage);
+      }
+    };
+    nextGroup.appendChild(nextLink);
+    pagination.appendChild(nextGroup);
+  }
+
+  renderTable(currentPage);
+</script>
+</body>
+</html>
+
+```
+</details>
+
+<details>
+  <summary>🔽 membersdetail.html 코드 보기</summary>
+  
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.user_name }} 정보 조회</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <style>
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+    }
+    </style>
+</head>
+<body>
+  <section style="background-color: #eee;">
+    <div class="container py-5">
+      <!-- Breadcrumb -->
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <nav class="bg-light rounded-3 p-3 mb-4">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="{% url 'members' %}">뒤로가기</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{ user.user_name }}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Profile Section -->
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <!-- Profile Card -->
+          <div class="card mb-4 text-center">
+            <div class="card-body">
+              <img src="{{ user.profile_image.url }}?{{ user.updated_at.timestamp }}" 
+                  alt="avatar" class="rounded-circle profile-image">
+            </div>
+          </div>
+
+          <!-- Info Card -->
+          <div class="card">
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-sm-3"><strong>Name</strong></div>
+                <div class="col-sm-9 text-muted" id="user_name">{{ user.user_name }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3"><strong>Email</strong></div>
+                <div class="col-sm-9 text-muted" id="user_email">{{ user.user_email }}</div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-3"><strong>Phone</strong></div>
+                <div class="col-sm-9 text-muted" id="user_phone">{{ user.user_phone }}</div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3"><strong>Address</strong></div>
+                <div class="col-sm-9 text-muted" id="user_address">{{ user.user_address }}</div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    function setupPagination() {
+      const pagination = document.getElementById("pagination");
+      pagination.innerHTML = "";
+
+      const totalPages = Math.ceil(data.length / rowsPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="#">${i}</a>`;
+        if (i === currentPage) li.querySelector('a').classList.add('active');
+        li.addEventListener("click", () => renderTable(i));
+        pagination.appendChild(li);
+      }
+    }
+  </script>
+</body>
+</html>
+```
+</details>
+
+<details>
+  <summary>🔽 signup.html 코드 보기</summary>
+  
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <title>회원가입</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body class="p-3 m-0 border-0">
+  <div class="container">
+    <div class="text-center">
+      <h1>회원가입</h1>
+    </div><br>
+    
+
+      <form class="d-flex flex-column align-items-center" style="max-width: 400px; margin: 0 auto;" method="POST">
+        {% csrf_token %}        
+        <div class="mb-3 w-100">          
+          <input type="text" class="form-control" id="user_name" name="user_name" placeholder="이름">
+        </div>
+        <div class="mb-3 w-100">          
+          <input type="email" class="form-control" id="user_email" name="user_email" placeholder="이메일">
+        </div>
+        <div class="mb-3 w-100">          
+          <input type="password" class="form-control" id="user_password" name="user_password" placeholder="비밀번호">
+        </div>
+        <div class="mb-3 w-100">          
+          <input type="password" class="form-control" id="password_check" name="password_check" placeholder="비밀번호 재입력">          
+        </div>
+        <div class="mb-3 w-100">          
+          <input type="text" class="form-control" id="user_address" name="user_address" placeholder="도로명 주소">
+        </div>
+        <div class="mb-3 w-100">          
+          <input type="text" class="form-control" id="user_phone" name="user_phone" placeholder="휴대전화번호 010-xxxx-xxxx">
+        </div>
+        <div class="mb-3 w-100">          
+          <input type="text" class="form-control" id="user_birthdate" name="user_birthdate" placeholder="생년월일 1900-01-01">
+        </div>        
+        <div class="mb-3 form-check w-100">
+          <input class="form-check-input" type="checkbox" id="gridCheck">
+          <label class="form-check-label" for="gridCheck">
+            동의
+          </label>
+        </div>                
+        <div class="mb-3">
+          <button type="submit" class="btn btn-primary">확인</button>
+        </div>
+        <div class="mb-3 w-100">
+          {{ error }}
+          {{ success }}              
+        </div>        
+      </form>
+    
+  </div>
+</body>
+
+</html>
+```
+</details>
