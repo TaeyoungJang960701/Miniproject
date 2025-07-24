@@ -12,19 +12,18 @@
 
 ## 프로젝트 구조(디렉터리 트리)
 ```
-
-inn_ryeock/
-├── HRapp/
-│ ├── models.py
-│ ├── views.py
-│ ├── urls.py
-│ └── templates/
-│ ├── home.html
-│ ├── login.html
-│ ├── signup.html
-│ ├── medetail.html
-│ └── membersdetail.html
-└── manage.py
+📂 inn_ryeock/
+┣ 📂 HRapp/
+┃ ┣ 📜 models.py
+┃ ┣ 📜 views.py
+┃ ┣ 📜 urls.py
+┃ ┗ 📂 templates/
+┃ ┣ 📜 home.html
+┃ ┣ 📜 login.html
+┃ ┣ 📜 signup.html
+┃ ┣ 📜 medetail.html
+┃ ┗ 📜 membersdetail.html
+┣ 📜 manage.py
 ```
 
 - [x] 마크다운 배움  
