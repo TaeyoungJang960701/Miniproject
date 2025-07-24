@@ -35,7 +35,7 @@ https://inn-ryeock.onrender.com
   - Django 구성, AJAX 구성
   - PPT 제작, 스토리보드 제작
 
-
+ 
 ## 🛠 개발환경
 
 ### 💻 Frontend
