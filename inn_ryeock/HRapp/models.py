@@ -16,7 +16,7 @@ class User(models.Model):
     default='profile_images/default.png',
     blank=True
 )
-    
+
     class Meta:
         db_table = 'user'
         verbose_name = 'User'
