@@ -360,8 +360,9 @@ urlpatterns = [
 
 </body>
 </html>
-</details>
 ```
+</details>
+
 
 <details>
   <summary>🔽 medetail.html 코드 보기</summary>
