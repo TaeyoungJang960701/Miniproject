@@ -223,7 +223,6 @@ def MeImageView(request):
         return JsonResponse({'image_url': user.profile_image.url})
     return JsonResponse({'error': 'No image uploaded'}, status=400)
 ```
-[Back To Top](#-💻-Code)
 </details>
 
 <details>
