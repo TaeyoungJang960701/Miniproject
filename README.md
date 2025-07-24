@@ -11,20 +11,21 @@
 인력사무소 운영자는 인력관리와 이들의 경력을 살려 채용할 수 있도록 연결해주는 인력 매칭 서비스입니다.
 
 ## 프로젝트 구조(디렉터리 트리)
+```
 
-📂inn_ryeock
- ┣ 📂HRapp
- ┃ ┣ 📜models.py
- ┃ ┣ 📜views.py
- ┃ ┣ 📜urls.py
- ┃ ┗ 📂templates/
- ┃    ┣ 📜home.html
- ┃    ┣ 📜login.html
- ┃    ┣ 📜signup.html
- ┃    ┣ 📜medetail.html
- ┃    ┗ 📜membersdetail.html
- ┣ 📜manage.py
-
+inn_ryeock/
+├── HRapp/
+│ ├── models.py
+│ ├── views.py
+│ ├── urls.py
+│ └── templates/
+│ ├── home.html
+│ ├── login.html
+│ ├── signup.html
+│ ├── medetail.html
+│ └── membersdetail.html
+└── manage.py
+```
 
 - [x] 마크다운 배움  
 - [ ] README 작성하기  
