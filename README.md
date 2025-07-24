@@ -255,6 +255,7 @@ class User(models.Model):
     def __str__(self):
         return self.user_name
   ```
+</details>
 <summary>🔽 urls.py 코드 보기</summary>
   
 ```python
@@ -273,3 +274,4 @@ urlpatterns = [
     path('members/me/edit/image', views.MeImageView, name='me_edit_image'),
 ]
 ```
+</details>
