@@ -228,10 +228,5 @@ def MeImageView(request):
 
 </details>
 ```
-<a name="top"></a> <!-- 문서 최상단에 넣음 -->
-
-...
-
-[back to top](#top) <!-- 어디서든 클릭 시 최상단으로 이동 -->
 
 
