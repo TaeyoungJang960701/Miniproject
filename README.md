@@ -13,13 +13,13 @@
 #### 👷 멤버 구성
 ---
 
-- **박선번**
+- **박석번**
   - DB 구성
   - HTML 제작: `login.html`, `Members.html`, `Medetail.html`, `home.html`, `membersdetail.html`, `signup.html`
   - Django 구성, AJAX 구성
   - PPT 제작, 스토리보드 제작
 
-- **정태영**
+- **장태영**
   - DB 구성
   - HTML 제작: `login.html`, `Members.html`, `Medetail.html`, `home.html`, `membersdetail.html`, `signup.html`
   - Django 구성, AJAX 구성
