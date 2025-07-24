@@ -67,7 +67,7 @@
 ┣ 📜 manage.py
 ```
 
-## 💻 코드 예시
+## 💻 BACK 코드 예시
 
 <details>
 <summary>🔽 views.py 코드 보기</summary>
@@ -274,5 +274,33 @@ urlpatterns = [
     path('members/me/edit/', views.MeEditView, name='me_edit'),
     path('members/me/edit/image', views.MeImageView, name='me_edit_image'),
 ]
+```
+</details>
+## 💻 BACK 코드 예시
+<details>
+  <summary>🔽 home.html 코드 보기</summary>
+```
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <title>HOME</title>
+</head>
+<body>
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="text-center">
+            <div class="mt-4">
+                <a href="{% url 'login' %}" class="btn btn-primary"><h1>인력사무소</h1></a>
+            </div>
+            <div class="mt-4">
+                <p>인력사무소에 오신 것을 환영합니다. 회원 가입 후 로그인하여 서비스를 이용하세요.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
 ```
 </details>
