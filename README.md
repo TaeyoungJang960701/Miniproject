@@ -30,15 +30,15 @@
 - [ ] README 작성하기  
 - [ ] 깃허브에 업로드하기
 
-● 박번: 
-DB구성, login.html제작, Members.html제작, Medetail.html제작, home.html제작, membersdetail.html제작, signup.html제작
-, PPT제작, django 구성, ajax구성, 스토리보드제작
-● 정태영: 
-DB구성, login.html제작, Members.html제작, Medetail.html제작, home.html제작, membersdetail.html제작, signup.html제작
-, PPT제작, django 구성, ajax구성, 스토리보드제작
-● 전범하: D
-B구성, login.html제작, Members.html제작, Medetail.html제작, home.html제작, membersdetail.html제작, signup.html제작
-, PPT제작, django 구성, ajax구성, 스토리보드제작
+#### 👷 멤버 구성
+---
+
+| 이름     | 주요 담당 업무 |
+|----------|----------------|
+| **박선번** | - DB 구성<br>- `login.html`, `Members.html`, `Medetail.html`, `home.html`, `membersdetail.html`, `signup.html` 제작<br>- PPT 제작<br>- Django 구성<br>- AJAX 구성<br>- 스토리보드 제작 |
+| **정태영** | - DB 구성<br>- `login.html`, `Members.html`, `Medetail.html`, `home.html`, `membersdetail.html`, `signup.html` 제작<br>- PPT 제작<br>- Django 구성<br>- AJAX 구성<br>- 스토리보드 제작 |
+| **전범하** | - DB 구성<br>- `login.html`, `Members.html`, `Medetail.html`, `home.html`, `membersdetail.html`, `signup.html` 제작<br>- PPT 제작<br>- Django 구성<br>- AJAX 구성<br>- 스토리보드 제작 |
+
 
 ## 🛠 개발환경
 
