@@ -276,11 +276,14 @@ urlpatterns = [
 ]
 ```
 </details>
+
 ## 💻 BACK 코드 예시
+
 <details>
   <summary>🔽 home.html 코드 보기</summary>
+
 ```html
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -302,5 +305,5 @@ urlpatterns = [
     </div>
 </body>
 </html>
-```
 </details>
+```
