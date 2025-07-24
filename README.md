@@ -72,8 +72,18 @@
 ```
 
 ## 💻 코드 예시
+<details>
+<summary>🔽 views.py 코드 보기</summary>
+
+```python
+from django.shortcuts import render
+
+def home(request):
+    return render(request, "home.html")
 
 
 [위로 가기](#top) <!-- 어디서든 클릭 시 최상단으로 이동 -->
 ```javascript
 console.log("안녕하세요, 마크다운!");
+</details> ```
+
