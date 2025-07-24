@@ -224,6 +224,7 @@ def MeImageView(request):
     return JsonResponse({'error': 'No image uploaded'}, status=400)
 ```
 [Back To Top](#-💻-Code)
+</details>
 
 <details>
 <summary>🔽 models.py 코드 보기</summary>
