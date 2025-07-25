@@ -1,8 +1,6 @@
 
 ---
-
 ## 쟝고를 활용한 미니프로젝트
-
 ---
 
 # 인력사무소
@@ -11,13 +9,15 @@
 인력사무소 운영자는 인력관리와 이들의 경력을 살려 채용할 수 있도록 연결해주는 인력 매칭 서비스입니다.  
 회원가입, 로그인, 내정보 바로보기와 내정보 수정, 기존 회원 검색 기능을 탑재하였습니다.
 
+##### 🔗 프로젝트 링크 https://inn-ryeock.onrender.com
+
+
 #### 👷 멤버 구성
 ---
-
 - **박석번**
   - DB 구성
-  - HTML 제작: `login.html`, `Members.html`, `Medetail.html`, `home.html`, `membersdetail.html`, `signup.html`
-  - Django 구성, AJAX 구성
+  - HTML 제작: `login.html`, `signup.html`
+  - Django 구성
   - PPT 제작, 스토리보드 제작
 
 - **장태영**
@@ -885,3 +885,4 @@ urlpatterns = [
 ```
 [back to top](#front_top)
 </details>
+
