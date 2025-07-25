@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>프로젝트 소개</title>
+
+  <!-- 외부 라이브러리 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <!-- 광고 배너 및 디자인 -->
+  <style>
+    #left-banner, #right-banner {
+      position: fixed;
+      top: 100px;
+      width: 120px;
+      height: 600px;
+      z-index: 1000;
+    }
+    #left-banner { left: calc(50% - 720px - 130px); }
+    #right-banner { left: calc(50% + 720px + 10px); }
+    #left-banner img, #right-banner img {
+      width: 100%;
+      height: 100%;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      border-radius: 5px;
+    }
+    body { padding-top: 70px; }
+  </style>
+</head>
+
+<body>
+  <!-- 네비게이션 바 -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">인적사항 시스템</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="{% if request.resolver_match.url_name == 'members' %}active{% endif %}">
+          <a href="{% url 'members' %}">홈</a>
+        </li>
+        <li class="{% if request.resolver_match.url_name == 'intro' %}active{% endif %}">
+          <a href="{% url 'intro' %}">소개</a>
+        </li>
+        <li class="{% if request.resolver_match.url_name == 'minigame' %}active{% endif %}">
+          <a href="{% url 'minigame' %}">미니게임</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 좌우 배너 -->
+  <div id="left-banner">
+    <a href="https://www.baemin.com" target="_blank">
+      <img src="{% static 'profile_images/baedal.png' %}" alt="광고 배너">
+    </a>
+  </div>
+  <div id="right-banner">
+    <a href="https://www.baemin.com" target="_blank">
+      <img src="{% static 'profile_images/baedal.png' %}" alt="광고 배너">
+    </a>
+  </div>
+
+  <!-- 본문 -->
+  <div class="container">
+    <h2><strong>📌 프로젝트 소개</strong></h2>
+    <p>
+      <strong>프로젝트명:</strong> 장고를 활용한 미니프로젝트 - <u>인력사무소</u><br>
+      <strong>목표:</strong> 중장년층 및 고령층 구직자들이 손쉽게 일자리를 찾고, 인력사무소 운영자는 이들의 경력을 살려 채용할 수 있도록 연결하는 인력 매칭 서비스<br>
+      <strong>주요 기능:</strong> 회원가입, 로그인, 내정보 조회 및 수정, 기존 회원 검색<br>
+      <strong>🔗 배포 링크:</strong>
+      <a href="https://inn-ryeock.onrender.com" target="_blank">inn-ryeock.onrender.com</a>
+    </p>
+
+    <h3><strong>👷 팀원 및 역할</strong></h3>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>이름</th>
+          <th>이메일</th>
+          <th>역할</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>박석번</strong></td>
+          <td>wkoilz1028@gmail.com</td>
+          <td>
+            <ul>
+              <li>DB 구성</li>
+              <li>HTML: login.html, signup.html</li>
+              <li>Django 구성</li>
+              <li>PPT 제작, 스토리보드 제작</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>장태영</strong></td>
+          <td>nalgozo@naver.com</td>
+          <td>
+            <ul>
+              <li>DB 구성</li>
+              <li>HTML: login.html, Members.html, Medetail.html, home.html, membersdetail.html, signup.html</li>
+              <li>Django, AJAX 구성</li>
+              <li>PPT 제작, 스토리보드 제작</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>전범하</strong></td>
+          <td>jyy01903@naver.com</td>
+          <td>
+            <ul>
+              <li>DB 구성</li>
+              <li>HTML: login.html, Members.html, Medetail.html, home.html, membersdetail.html, signup.html</li>
+              <li>Django, AJAX 구성</li>
+              <li>PPT 제작, 스토리보드 제작</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>지뢰찾기 - 미니게임</title>
+
+  <!-- Bootstrap & jQuery -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <style>
+    body {
+      padding-top: 70px;
+      text-align: center;
+      font-family: '맑은 고딕', sans-serif;
+    }
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+    td {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #333;
+      text-align: center;
+      vertical-align: middle;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    td.revealed {
+      background-color: #e0e0e0;
+      cursor: default;
+    }
+    td.mine {
+      background-color: red;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ✅ 네비게이션 바 -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">인적사항 시스템</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="{% url 'members' %}">홈</a></li>
+      <li><a href="{% url 'intro' %}">소개</a></li>
+      <li class="active"><a href="{% url 'minigame' %}">미니게임</a></li>
+    </ul>
+  </div>
+</nav>
+
+<h2>🧨 지뢰찾기</h2>
+<table id="board"></table>
+
+<script>
+  const size = 10;
+  const mineCount = 15;
+  let board = [];
+
+  // 지뢰 설치
+  function initBoard() {
+    board = Array.from({ length: size }, () =>
+      Array.from({ length: size }, () => ({ mine: false, revealed: false, count: 0 }))
+    );
+
+    // 랜덤 지뢰 설치
+    let placed = 0;
+    while (placed < mineCount) {
+      const x = Math.floor(Math.random() * size);
+      const y = Math.floor(Math.random() * size);
+      if (!board[x][y].mine) {
+        board[x][y].mine = true;
+        placed++;
+        updateNeighbors(x, y);
+      }
+    }
+  }
+
+  function updateNeighbors(x, y) {
+    for (let dx = -1; dx <= 1; dx++) {
+      for (let dy = -1; dy <= 1; dy++) {
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx >= 0 && ny >= 0 && nx < size && ny < size && !(dx === 0 && dy === 0)) {
+          board[nx][ny].count++;
+        }
+      }
+    }
+  }
+
+  function revealCell(x, y, cell) {
+    if (board[x][y].revealed) return;
+    board[x][y].revealed = true;
+    cell.classList.add("revealed");
+
+    if (board[x][y].mine) {
+      cell.classList.add("mine");
+      cell.textContent = "💣";
+      alert("지뢰! 게임 종료 😱");
+      showAllMines();
+      return;
+    }
+
+    if (board[x][y].count > 0) {
+      cell.textContent = board[x][y].count;
+    } else {
+      cell.textContent = "";
+      // 주변 0인 셀 재귀
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          const nx = x + dx;
+          const ny = y + dy;
+          if (nx >= 0 && ny >= 0 && nx < size && ny < size && !(dx === 0 && dy === 0)) {
+            const nextCell = document.getElementById(`cell-${nx}-${ny}`);
+            revealCell(nx, ny, nextCell);
+          }
+        }
+      }
+    }
+  }
+
+  function showAllMines() {
+    for (let x = 0; x < size; x++) {
+      for (let y = 0; y < size; y++) {
+        if (board[x][y].mine) {
+          const cell = document.getElementById(`cell-${x}-${y}`);
+          cell.classList.add("mine");
+          cell.textContent = "💣";
+        }
+      }
+    }
+  }
+
+  function renderBoard() {
+    const table = document.getElementById("board");
+    table.innerHTML = "";
+    for (let x = 0; x < size; x++) {
+      const row = document.createElement("tr");
+      for (let y = 0; y < size; y++) {
+        const cell = document.createElement("td");
+        cell.id = `cell-${x}-${y}`;
+        cell.onclick = () => revealCell(x, y, cell);
+        row.appendChild(cell);
+      }
+      table.appendChild(row);
+    }
+  }
+
+  initBoard();
+  renderBoard();
+</script>
+
+</body>
+</html>
