@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    canvas {
+      border: 2px solid #444;
+      margin-top: 20px;
+    }
+    #restartBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+    #restartBtn:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center;">지뢰찾기</h1>
+  <canvas id="gameCanvas" width="400" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+// 설정
+const COLS = 10;
+const ROWS = 10;
+const CELL_SIZE = 40;
+const MINES = 10;
+
+let gameMap = [];
+let revealed = [];
+let flags = [];
+let gameOver = false;
+
+function initGame() {
+    gameMap = Array.from({ length: COLS }, () => Array(ROWS).fill(0));
+    revealed = Array.from({ length: COLS }, () => Array(ROWS).fill(false));
+    flags = Array.from({ length: COLS }, () => Array(ROWS).fill(false));
+    gameOver = false;
+
+    // 지뢰 위치 설정
+    let positions = [];
+    for (let c = 0; c < COLS; c++) {
+        for (let r = 0; r < ROWS; r++) {
+            positions.push([c, r]);
+        }
+    }
+    
+    for (let i = 0; i < MINES; i++) {
+        let idx = Math.floor(Math.random() * positions.length);
+        let [c, r] = positions.splice(idx, 1)[0];
+        gameMap[c][r] = -1;
+
+        // 주변 숫자 증가
+        for (let dc = -1; dc <= 1; dc++) {
+            for (let dr = -1; dr <= 1; dr++) {
+                let nc = c + dc, nr = r + dr;
+                if (0 <= nc && nc < COLS && 0 <= nr && nr < ROWS && gameMap[nc][nr] !== -1) {
+                    gameMap[nc][nr]++;
+                }
+            }
+        }
+    }
+
+    drawBoard();
+}
+
+function drawBoard() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let c = 0; c < COLS; c++) {
+        for (let r = 0; r < ROWS; r++) {
+            let x = c * CELL_SIZE;
+            let y = r * CELL_SIZE;
+            ctx.strokeRect(x, y, CELL_SIZE, CELL_SIZE);
+
+            if (revealed[c][r]) {
+                if (gameMap[c][r] === -1) {
+                    ctx.fillStyle = "red";
+                    ctx.beginPath();
+                    ctx.arc(x + 20, y + 20, 10, 0, 2 * Math.PI);
+                    ctx.fill();
+                } else if (gameMap[c][r] > 0) {
+                    ctx.fillStyle = "black";
+                    ctx.font = "20px Arial";
+                    ctx.fillText(gameMap[c][r], x + 14, y + 26);
+                }
+            } else if (flags[c][r]) {
+                ctx.fillStyle = "blue";
+                ctx.font = "20px Arial";
+                ctx.fillText("F", x + 14, y + 26);
+            }
+        }
+    }
+
+    if (gameOver) {
+        ctx.fillStyle = "rgba(255,0,0,0.7)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        ctx.font = "40px Arial";
+        ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2);
+    }
+}
+
+function reveal(c, r) {
+    if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return;
+    if (revealed[c][r] || flags[c][r]) return;
+
+    revealed[c][r] = true;
+
+    if (gameMap[c][r] === 0) {
+        for (let dc = -1; dc <= 1; dc++) {
+            for (let dr = -1; dr <= 1; dr++) {
+                if (!(dc === 0 && dr === 0)) {
+                    reveal(c + dc, r + dr);
+                }
+            }
+        }
+    }
+}
+
+canvas.addEventListener("mousedown", (e) => {
+    if (gameOver) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const c = Math.floor(x / CELL_SIZE);
+    const r = Math.floor(y / CELL_SIZE);
+
+    if (e.button === 0) { // 좌클릭
+        if (gameMap[c][r] === -1) {
+            revealed[c][r] = true;
+            gameOver = true;
+        } else {
+            reveal(c, r);
+        }
+    } else if (e.button === 2) { // 우클릭
+        flags[c][r] = !flags[c][r];
+    }
+
+    drawBoard();
+});
+
+canvas.addEventListener("contextmenu", (e) => e.preventDefault());
+
+initGame();
+  </script>
+</body>
+</html>

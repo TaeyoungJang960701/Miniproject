@@ -182,3 +182,7 @@ def members(request):
 
 def minigame(request):
     return render(request, 'minigame.html')
+
+
+def minesweeperView(request):
+    return render(request, 'minesweeper.html')

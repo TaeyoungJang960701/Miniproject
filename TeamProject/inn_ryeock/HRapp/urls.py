@@ -14,4 +14,6 @@ urlpatterns = [
     path('intro/', views.intro, name='intro'),
     path('members/', views.members, name='members'),
     path('minigame/', views.minigame, name='minigame'),  # ✅ 추가된 라인
+
+    path('minesweeper/', views.minesweeperView, name='minesweeper'),
 ]
