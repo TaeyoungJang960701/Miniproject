@@ -4,6 +4,8 @@ from .models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from datetime import date
+from django.contrib import messages
+from datetime import datetime
 
 def HomeView(request):
     return render(request, 'home.html')
@@ -37,50 +39,69 @@ def LogoutView(request):
     request.session.flush()
     return redirect('login.html')
 
+def format_phone_number(phone):
+    # '01011112222' -> '010-1111-2222'
+    return f"{phone[:3]}-{phone[3:7]}-{phone[7:]}"
+
+
 def SignupView(request):
-    if request.method =='GET':
+    if request.method == 'GET':
         return render(request, 'signup.html')
+    
     elif request.method == 'POST':
-        user_name = request.POST.get('user_name', None)
-        user_email = request.POST.get('user_email', None)
-        user_password = request.POST.get('user_password', None)
-        password_check = request.POST.get('password_check', None)
-        user_address = request.POST.get('user_address', None)
-        user_phone = request.POST.get('user_phone', None)
-        user_birthdate = request.POST.get('user_birthdate', None)
-        
-        res_data = {}
-        
-        if not(user_name and user_password and password_check and user_address and user_phone and user_birthdate and user_email):
-            res_data['error'] = "모든 값을 입력해주세요."
-            return render(request, 'signup.html', res_data)
+        user_name = request.POST.get('user_name', '')
+        user_email = request.POST.get('user_email', '')
+        user_password = request.POST.get('user_password', '')
+        password_check = request.POST.get('password_check', '')
+        user_address = request.POST.get('user_address', '')
+        user_phone = request.POST.get('user_phone', '')
+        user_birthdate = request.POST.get('user_birthdate', '').strip()
+
+        # 생년월일 자동 포맷
+        if len(user_birthdate) == 8 and user_birthdate.isdigit():
+            user_birthdate = f"{user_birthdate[:4]}-{user_birthdate[4:6]}-{user_birthdate[6:]}"
+
+        error = None        
+
+        if not (user_name and user_password and password_check and user_address and user_phone and user_birthdate and user_email):
+            error = "모든 값을 입력해주세요."
         elif User.objects.filter(user_email=user_email).exists():
-            res_data['error'] = "이미 존재하는 이메일 입니다."
-            return render(request, 'signup.html', res_data)
+            error = "이미 존재하는 이메일 입니다."
         elif user_password != password_check:
-            res_data['error'] = "비밀번호가 일치하지 않습니다."
-            return render(request, 'signup.html', res_data)
-        elif len(user_phone) != 11:
-            res_data['error'] = "전화번호는 11자리로 입력해주세요."
-            return render(request, 'signup.html', res_data)
-        elif len(user_birthdate) != 10 or not user_birthdate.replace('-', '').isdigit():
-            res_data['error'] = "생년월일은 YYYY-MM-DD 형식으로 입력해주세요."
-            return render(request, 'signup.html', res_data)
+            error = "비밀번호가 일치하지 않습니다."
+        elif len(user_phone) != 11 or not user_phone.isdigit():
+            error = "전화번호는 11자리 숫자로 입력해주세요."
         else:
-            user= User(
-                user_name=user_name,
-                user_email=user_email,
-                user_password=make_password(user_password),
-                user_address=user_address,
-                user_phone=user_phone,
-                user_birthdate=user_birthdate
-            )
-            
-            user.save()
-            # res_data['success'] = "회원가입이 완료되었습니다."
+            try:
+                datetime.strptime(user_birthdate, '%Y-%m-%d')
+            except ValueError:
+                error = "생년월일은 유효한 날짜여야 합니다."
+
+        if error:
+            context = {
+                'error': error,
+                'user_name': user_name,
+                'user_email': user_email,
+                'user_address': user_address,
+                'user_phone': user_phone,
+                'user_birthdate': user_birthdate
+            }
+            return render(request, 'signup.html', context)
+
+        # 회원 생성
+        formatted_phone = format_phone_number(user_phone)
+        user = User(
+            user_name=user_name,
+            user_email=user_email,
+            user_password=make_password(user_password),
+            user_address=user_address,
+            user_phone=formatted_phone,
+            user_birthdate=user_birthdate
+        )
+        user.save()        
         
-        # return render(request, 'signup.html', res_data)
-        return redirect('login')
+        return redirect('/login/')
+
 
 
 def MembersView(request):
