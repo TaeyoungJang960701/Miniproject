@@ -14,19 +14,19 @@
 
 #### 👷 멤버 구성
 ---
-- **박석번**
+- **박석번** (wkoilz1028@gmail.com)
   - DB 구성
   - HTML 제작: `login.html`, `signup.html`
   - Django 구성
   - PPT 제작, 스토리보드 제작
 
-- **장태영**
+- **장태영** (nalgozo@naver.com)
   - DB 구성
   - HTML 제작: `login.html`, `Members.html`, `Medetail.html`, `home.html`, `membersdetail.html`, `signup.html`
   - Django 구성, AJAX 구성
   - PPT 제작, 스토리보드 제작
 
-- **전범하**
+- **전범하** (jyy01903@naver.com)
   - DB 구성
   - HTML 제작: `login.html`, `Members.html`, `Medetail.html`, `home.html`, `membersdetail.html`, `signup.html`
   - Django 구성, AJAX 구성
