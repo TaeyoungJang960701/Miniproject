@@ -11,4 +11,5 @@ urlpatterns = [
     path('logout/', views.LogoutView, name='logout'),
     path('members/me/edit/', views.MeEditView, name='me_edit'),
     path('members/me/edit/image', views.MeImageView, name='me_edit_image'),
+    path('minesweeper/', views.minesweeperView, name='minesweeper'),
 ]
