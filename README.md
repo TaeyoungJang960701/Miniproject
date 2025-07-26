@@ -19,7 +19,7 @@
   - DB 구성
   - HTML 제작: `login.html`, `signup.html`
   - Django 구성
-  - PPT 제작, 스토리보드 제작
+  - PPT 제작, 스토리보드 제작, 미니게임 제작
 
 - **장태영** (nalgozo@naver.com)
   - DB 구성
